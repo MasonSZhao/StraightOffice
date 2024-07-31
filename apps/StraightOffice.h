@@ -4,6 +4,7 @@
 #pragma once
 
 #include "..\include\StraightExcel\StraightExcelDispatchDriver.h"
+#include "..\include\StraightOle\StraightOleClipboard.h"
 #include "..\include\StraightOle\StraightOleDispatchDriver.h"
 #include "..\include\StraightOle\StraightOleInit.h"
 #include "..\include\StraightPpt\StraightPptDispatchDriver.h"
