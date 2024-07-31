@@ -15,11 +15,58 @@ endif()
 # Set the name of the project.
 project ("StraightOffice")
 
+# Glob all files ended with .h and .cpp in the folders.
+file (GLOB STRAIGHTOLE_SRCS CONFIGURE_DEPENDS "src/StraightOle/StraightOle*.cpp")
+file (GLOB STRAIGHTOLE_HEADERS CONFIGURE_DEPENDS "include/StraightOle/StraightOle*.h")
+
+# Glob all files ended with .h and .cpp in the folders.
+file (GLOB STRAIGHTWORD_SRCS CONFIGURE_DEPENDS "src/StraightWord/StraightWord*.cpp")
+file (GLOB STRAIGHTWORD_HEADERS CONFIGURE_DEPENDS "include/StraightWord/StraightWord*.h")
+
+# Glob all files ended with .h and .cpp in the folders.
+file (GLOB STRAIGHTEXCEL_SRCS CONFIGURE_DEPENDS "src/StraightExcel/StraightExcel*.cpp")
+file (GLOB STRAIGHTEXCEL_HEADERS CONFIGURE_DEPENDS "include/StraightExcel/StraightExcel*.h")
+
+# Glob all files ended with .h and .cpp in the folders.
+file (GLOB STRAIGHTPPT_SRCS CONFIGURE_DEPENDS "src/StraightPpt/StraightPpt*.cpp")
+file (GLOB STRAIGHTPPT_HEADERS CONFIGURE_DEPENDS "include/StraightPpt/StraightPpt*.h")
+
 # Add source to the project's executable application.
 add_executable (
 	StraightOfficeExecute
 	"apps/StraightOffice.cpp"
 	"apps/StraightOffice.h"
+	${STRAIGHTOLE_SRCS}
+	${STRAIGHTOLE_HEADERS}
+	${STRAIGHTWORD_SRCS}
+	${STRAIGHTWORD_HEADERS}
+	${STRAIGHTEXCEL_SRCS}
+	${STRAIGHTEXCEL_HEADERS}
+	${STRAIGHTPPT_SRCS}
+	${STRAIGHTPPT_HEADERS}
+)
+
+# Add source to the project's static library.
+add_library(
+	StraightOfficeStatic 
+	STATIC
+	${STRAIGHTOLE_SRCS}
+	${STRAIGHTOLE_HEADERS}
+	${STRAIGHTWORD_SRCS}
+	${STRAIGHTWORD_HEADERS}
+	${STRAIGHTEXCEL_SRCS}
+	${STRAIGHTEXCEL_HEADERS}
+	${STRAIGHTPPT_SRCS}
+	${STRAIGHTPPT_HEADERS}
+)
+
+# Add include directories to the project's static library.
+target_include_directories(
+	StraightOfficeStatic 
+	PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include/StraightOle>"
+	PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include/StraightWord>"
+	PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include/StraightExcel>"
+	PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include/StraightPpt>"
 )
 
 # Test option
