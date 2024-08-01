@@ -6,5 +6,8 @@
 #pragma once
 
 namespace STRAIGHTPPT {
-
+class PptApplication;
+class PptPresentation;
+class PptPresentations;
+class PptProgram;
 }
