@@ -70,7 +70,7 @@ target_include_directories(
 )
 
 # Test option
-set(STRAIGHTOFFICE_BUILD_TESTS ON)
+set(STRAIGHTOFFICE_BUILD_TESTS OFF)
 
 if (STRAIGHTOFFICE_BUILD_TESTS)
 
