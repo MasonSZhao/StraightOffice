@@ -3,7 +3,11 @@
 
 #pragma once
 
+#include "..\include\StraightExcel\StraightExcelApplication.h"
 #include "..\include\StraightExcel\StraightExcelDispatchDriver.h"
+#include "..\include\StraightExcel\StraightExcelProgram.h"
+#include "..\include\StraightExcel\StraightExcelWorkbook.h"
+#include "..\include\StraightExcel\StraightExcelWorkbooks.h"
 #include "..\include\StraightOle\StraightOleClipboard.h"
 #include "..\include\StraightOle\StraightOleDialogBox.h"
 #include "..\include\StraightOle\StraightOleDispatchDriver.h"

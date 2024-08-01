@@ -6,5 +6,8 @@
 #pragma once
 
 namespace STRAIGHTEXCEL {
-
+class ExcelApplication;
+class ExcelWorkbook;
+class ExcelWorkbooks;
+class ExcelProgram;
 }
