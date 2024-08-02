@@ -17,5 +17,9 @@
 #include "..\include\StraightPpt\StraightPptPresentation.h"
 #include "..\include\StraightPpt\StraightPptPresentations.h"
 #include "..\include\StraightPpt\StraightPptProgram.h"
+#include "..\include\StraightWord\StraightWordApplication.h"
 #include "..\include\StraightWord\StraightWordDispatchDriver.h"
+#include "..\include\StraightWord\StraightWordDocument.h"
+#include "..\include\StraightWord\StraightWordDocuments.h"
+#include "..\include\StraightWord\StraightWordProgram.h"
 #include <iostream>

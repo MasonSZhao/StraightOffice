@@ -6,5 +6,8 @@
 #pragma once
 
 namespace STRAIGHTWORD {
-
+class WordApplication;
+class WordProgram;
+class WordDocument;
+class WordDocuments;
 }
