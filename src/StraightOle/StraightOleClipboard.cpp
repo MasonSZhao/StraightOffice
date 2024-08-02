@@ -2,7 +2,6 @@
 // Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
 #include "..\..\include\StraightOle\StraightOleClipboard.h"
-
 #include <vector>
 
 namespace STRAIGHTOLE {

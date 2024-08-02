@@ -8,16 +8,11 @@ namespace STRAIGHTPPT {
 void PptPresentations::open(PptPresentation& des, const std::wstring& filePath)
 {
     static const int version { 2007 };
-    VARIANT x;
-    x.vt = VT_BSTR;
-    BSTR bstrFilePath = ::SysAllocString(filePath.c_str());
-    x.bstrVal = bstrFilePath;
-    STRAIGHTOLE::OleStrW ole(filePath);
+    STRAIGHTOLE::OleStrW x { filePath };
     VARIANT result;
     VariantInit(&result);
     this->invokeNameId(DISPATCH_METHOD, &result, 0x7d5, 1, x);
-
-    ::SysFreeString(bstrFilePath);
+    // this->invokeNameId(DISPATCH_METHOD, &result, const_cast<LPOLESTR>(L"Open"), 1, x);
     des._dispatch = result.pdispVal;
 }
 
