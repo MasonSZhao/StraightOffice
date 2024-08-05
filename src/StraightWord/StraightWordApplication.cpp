@@ -24,7 +24,8 @@ void WordApplication::get_Documents(WordDocuments& des)
 void WordApplication::put_Visible(bool val)
 {
     static const int version { 2007 };
-    this->invokeNameId(DISPATCH_PROPERTYPUT, NULL, 0x17 /*const_cast<LPOLESTR>(L"Visible")*/, 1, STRAIGHTOLE::OleBool(val));
+    this->invokeNameId(DISPATCH_PROPERTYPUT, NULL, 0x17, 1, STRAIGHTOLE::OleBool(val));
+    // this->invokeNameStr(DISPATCH_PROPERTYPUT, NULL, const_cast<LPOLESTR>(L"Visible"), 1, STRAIGHTOLE::OleBool(val));
 }
 
 }

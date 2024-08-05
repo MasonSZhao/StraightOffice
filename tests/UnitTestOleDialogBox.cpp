@@ -20,7 +20,7 @@ SCENARIO("UnitTestOleDialogBox", "[OleDialogBox]")
                 {
                     STRAIGHTOLE::OleInit::initComForThisThread();
                     std::cout << STRAIGHTOLE::OleDialogBox::startFileOpenDialogBoxA() << std::endl;
-                    STRAIGHTOLE::OleInit::uninitCom();
+                    STRAIGHTOLE::OleInit::uninitComForThisThread();
                 }
             }
         }

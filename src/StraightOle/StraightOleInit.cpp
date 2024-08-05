@@ -15,7 +15,7 @@ HRESULT OleInit::initComForThisThread()
     return CoInitialize(NULL);
 }
 
-void OleInit::uninitCom()
+void OleInit::uninitComForThisThread()
 {
     CoUninitialize();
 }

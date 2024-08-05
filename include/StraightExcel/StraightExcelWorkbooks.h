@@ -19,6 +19,7 @@ public:
      * @brief Open a workbook.
      * @param des The destination.
      * @param filePath The file path.
+     * @warning Do use the native backslash format rather than the generic forward slash format.
      */
     void open(ExcelWorkbook& des, const std::wstring& filePath);
 };

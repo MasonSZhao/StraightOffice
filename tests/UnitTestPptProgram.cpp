@@ -4,6 +4,7 @@
 #include "..\..\include\StraightPpt\StraightPptPresentation.h"
 #include "..\..\include\StraightPpt\StraightPptPresentations.h"
 #include "..\..\include\StraightPpt\StraightPptProgram.h"
+#include <thread>
 
 /*
  * @details
@@ -22,27 +23,70 @@ SCENARIO("UnitTestPptProgram", "[PptProgram]")
             {
                 THEN("The file should be opened.")
                 {
-                    STRAIGHTOLE::OleInit::initComForThisThread();
-                    STRAIGHTPPT::PptApplication pXlApp;
-                    STRAIGHTPPT::PptProgram::start(pXlApp);
-                    STRAIGHTPPT::PptPresentations pXlPresentations;
-                    pXlApp.get_Presentations(pXlPresentations);
-
-                    STRAIGHTPPT::PptPresentation pXlPresentation;
-
-                    std::string str = STRAIGHTOLE::OleDialogBox::startFileOpenDialogBoxA();
-                    std::wstring wstr;
                     if (true) {
-                        int strLength = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
-                        if (strLength) {
-                            std::vector<wchar_t> buf(strLength + 1);
-                            buf[0] = 0;
-                            strLength = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, &buf[0], strLength + 1);
-                            wstr = std::wstring { &buf[0] };
-                        }
+                        STRAIGHTOLE::OleInit::initComForThisThread();
+                        STRAIGHTPPT::PptApplication pXlApp;
+                        STRAIGHTPPT::PptProgram::start(pXlApp);
+                        pXlApp.put_Visible(true);
+                        STRAIGHTPPT::PptPresentations pXlPresentations;
+                        pXlApp.get_Presentations(pXlPresentations);
+                        STRAIGHTPPT::PptPresentation pXlPresentation;
+                        pXlPresentations.open(pXlPresentation, STRAIGHTOLE::OleDialogBox::startFileOpenDialogBoxW());
+                        STRAIGHTOLE::OleInit::uninitComForThisThread();
                     }
-                    pXlPresentations.open(pXlPresentation, wstr);
-                    STRAIGHTOLE::OleInit::uninitCom();
+                }
+            }
+        }
+
+        GIVEN("Multiple Ppt files.")
+        {
+            WHEN("Opens in multiple threads.")
+            {
+                THEN("All files should be opened.")
+                {
+                    if (true) {
+                        std::vector<std::thread> vecThread;
+                        vecThread.emplace_back([]() {
+                            STRAIGHTOLE::OleInit::initComForThisThread();
+                            STRAIGHTPPT::PptApplication pXlApp;
+                            STRAIGHTPPT::PptProgram::start(pXlApp);
+                            pXlApp.put_Visible(true);
+                            STRAIGHTPPT::PptPresentations pXlPresentations;
+                            pXlApp.get_Presentations(pXlPresentations);
+                            if (true) {
+                                STRAIGHTPPT::PptPresentation pXlPresentation;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程1文件1_Thread1File1.pptx" };
+                                pXlPresentations.open(pXlPresentation, wstr);
+                            }
+                            if (true) {
+                                STRAIGHTPPT::PptPresentation pXlPresentation;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程1文件2_Thread1File2.pptx" };
+                                pXlPresentations.open(pXlPresentation, wstr);
+                            }
+                            STRAIGHTOLE::OleInit::uninitComForThisThread();
+                        });
+                        vecThread.emplace_back([]() {
+                            STRAIGHTOLE::OleInit::initComForThisThread();
+                            STRAIGHTPPT::PptApplication pXlApp;
+                            STRAIGHTPPT::PptProgram::start(pXlApp);
+                            pXlApp.put_Visible(true);
+                            STRAIGHTPPT::PptPresentations pXlPresentations;
+                            pXlApp.get_Presentations(pXlPresentations);
+                            if (true) {
+                                STRAIGHTPPT::PptPresentation pXlPresentation;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程2文件1_Thread2File1.pptx" };
+                                pXlPresentations.open(pXlPresentation, wstr);
+                            }
+                            if (true) {
+                                STRAIGHTPPT::PptPresentation pXlPresentation;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程2文件2_Thread2File2.pptx" };
+                                pXlPresentations.open(pXlPresentation, wstr);
+                            }
+                            STRAIGHTOLE::OleInit::uninitComForThisThread();
+                        });
+                        for (auto& e : vecThread)
+                            e.join();
+                    }
                 }
             }
         }

@@ -2,13 +2,20 @@
 // Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
 #include "..\..\include\StraightOle\StraightOleDialogBox.h"
+#include <atlconv.h> // USES_CONVERSION, W2A
 #include <shobjidl.h> // FileOpenDialogBox
 #include <vector>
 
 namespace STRAIGHTOLE {
 std::string OleDialogBox::startFileOpenDialogBoxA()
 {
-    std::string ret {};
+    USES_CONVERSION;
+    return W2A(OleDialogBox::startFileOpenDialogBoxW().c_str());
+}
+
+std::wstring OleDialogBox::startFileOpenDialogBoxW()
+{
+    std::wstring ret {};
     HRESULT hr;
     IFileOpenDialog* pFileOpen;
     // https://learn.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-cocreateinstance
@@ -22,13 +29,7 @@ std::string OleDialogBox::startFileOpenDialogBoxA()
                 PWSTR /*Unicode UTF-16 WideChar*/ pszFilePath;
                 hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
                 if (SUCCEEDED(hr)) {
-                    int strLength = WideCharToMultiByte(CP_ACP /*ANSI*/, 0, pszFilePath, -1, NULL, 0, NULL, FALSE);
-                    if (strLength) {
-                        std::vector<char> buf(strLength + 1);
-                        buf[0] = 0;
-                        WideCharToMultiByte(CP_ACP /*ANSI*/, 0, pszFilePath, -1, &buf[0], strLength + 1, NULL, FALSE);
-                        ret = std::string { &buf[0] };
-                    }
+                    ret = std::wstring { pszFilePath };
                     CoTaskMemFree(pszFilePath);
                 }
                 pItem->Release();

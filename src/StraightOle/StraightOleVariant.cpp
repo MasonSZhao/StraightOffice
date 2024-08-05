@@ -2,6 +2,7 @@
 // Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
 #include "..\..\include\StraightOle\StraightOleVariant.h"
+#include <atlconv.h> // USES_CONVERSION, W2A
 #include <vector>
 
 namespace STRAIGHTOLE {
@@ -90,22 +91,16 @@ OleDbl::OleDbl(double val)
 
 OleStrA::OleStrA(const std::string& val)
 {
-    std::wstring wstr { L"" };
-    int strLength = MultiByteToWideChar(CP_ACP, 0, val.c_str(), -1, NULL, 0);
-    if (strLength) {
-        std::vector<wchar_t> buf(strLength + 1);
-        buf[0] = 0;
-        MultiByteToWideChar(CP_ACP, 0, val.c_str(), -1, &buf[0], strLength + 1);
-        wstr = std::wstring { &buf[0] };
-    }
     this->vt = VT_BSTR;
-    this->bstrVal = ::SysAllocStringLen(wstr.data(), wstr.size());
+    USES_CONVERSION;
+    this->bstrVal = A2BSTR(val.c_str());
 }
 
 OleStrW::OleStrW(const std::wstring& val)
 {
     this->vt = VT_BSTR;
-    this->bstrVal = ::SysAllocStringLen(val.data(), val.size());
+    USES_CONVERSION;
+    this->bstrVal = W2BSTR(val.c_str());
 }
 
 }

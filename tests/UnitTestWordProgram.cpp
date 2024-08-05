@@ -24,28 +24,79 @@ SCENARIO("UnitTestExcelProgram", "[ExcelProgram]")
             {
                 THEN("The file should be opened.")
                 {
-                    STRAIGHTOLE::OleInit::initComForThisThread();
-                    STRAIGHTWORD::WordApplication pXlApp;
-                    STRAIGHTWORD::WordProgram::start(pXlApp);
-                    pXlApp.put_Visible(true);
-                    STRAIGHTWORD::WordDocuments pXlDocuments;
-                    pXlApp.get_Documents(pXlDocuments);
-                    STRAIGHTWORD::WordDocument pXlDocument;
-                    std::string str = STRAIGHTOLE::OleDialogBox::startFileOpenDialogBoxA();
-                    std::wstring wstr;
                     if (true) {
-                        int strLength = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
-                        if (strLength) {
-                            std::vector<wchar_t> buf(strLength + 1);
-                            buf[0] = 0;
-                            strLength = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, &buf[0], strLength + 1);
-                            wstr = std::wstring { &buf[0] };
-                        }
+                        STRAIGHTOLE::OleInit::initComForThisThread();
+                        STRAIGHTWORD::WordApplication pXlApp;
+                        STRAIGHTWORD::WordProgram::start(pXlApp);
+                        pXlApp.put_Visible(true);
+                        STRAIGHTWORD::WordDocuments pXlDocuments;
+                        pXlApp.get_Documents(pXlDocuments);
+                        STRAIGHTWORD::WordDocument pXlDocument;
+                        pXlDocuments.open(pXlDocument, STRAIGHTOLE::OleDialogBox::startFileOpenDialogBoxW());
+                        std::this_thread::sleep_for(std::chrono::seconds(3));
+                        std::chrono::year_month_day ymd;
+                        pXlDocument.Close();
+                        STRAIGHTOLE::OleInit::uninitComForThisThread();
                     }
-                    pXlDocuments.open(pXlDocument, wstr);
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
-                    pXlDocument.Close();
-                    STRAIGHTOLE::OleInit::uninitCom();
+                }
+            }
+        }
+
+        GIVEN("Multiple Word files.")
+        {
+            WHEN("Opens in multiple threads.")
+            {
+                THEN("All files should be opened.")
+                {
+                    if (true) {
+                        std::vector<std::thread> vecThread;
+                        vecThread.emplace_back([]() {
+                            STRAIGHTOLE::OleInit::initComForThisThread();
+                            STRAIGHTWORD::WordApplication pXlApp;
+                            STRAIGHTWORD::WordProgram::start(pXlApp);
+                            pXlApp.put_Visible(true);
+                            STRAIGHTWORD::WordDocuments pXlDocuments;
+                            pXlApp.get_Documents(pXlDocuments);
+                            STRAIGHTWORD::WordDocument pXlDocument1;
+                            STRAIGHTWORD::WordDocument pXlDocument2;
+                            if (true) {
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程1文件1_Thread1File1.docx" };
+                                pXlDocuments.open(pXlDocument1, wstr);
+                            }
+                            if (true) {
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程1文件2_Thread1File2.docx" };
+                                pXlDocuments.open(pXlDocument2, wstr);
+                            }
+                            std::this_thread::sleep_for(std::chrono::seconds(6));
+                            pXlDocument1.Close();
+                            pXlDocument2.Close();
+                            STRAIGHTOLE::OleInit::uninitComForThisThread();
+                        });
+                        vecThread.emplace_back([]() {
+                            STRAIGHTOLE::OleInit::initComForThisThread();
+                            STRAIGHTWORD::WordApplication pXlApp;
+                            STRAIGHTWORD::WordProgram::start(pXlApp);
+                            pXlApp.put_Visible(true);
+                            STRAIGHTWORD::WordDocuments pXlDocuments;
+                            pXlApp.get_Documents(pXlDocuments);
+                            STRAIGHTWORD::WordDocument pXlDocument1;
+                            STRAIGHTWORD::WordDocument pXlDocument2;
+                            if (true) {
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程2文件1_Thread2File1.docx" };
+                                pXlDocuments.open(pXlDocument1, wstr);
+                            }
+                            if (true) {
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程2文件2_Thread2File2.docx" };
+                                pXlDocuments.open(pXlDocument2, wstr);
+                            }
+                            std::this_thread::sleep_for(std::chrono::seconds(6));
+                            pXlDocument1.Close();
+                            pXlDocument2.Close();
+                            STRAIGHTOLE::OleInit::uninitComForThisThread();
+                        });
+                        for (auto& e : vecThread)
+                            e.join();
+                    }
                 }
             }
         }

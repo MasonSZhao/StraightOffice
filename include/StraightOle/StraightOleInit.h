@@ -38,7 +38,7 @@ public:
      * @brief Closes the COM library on the current thread, unloads all DLLs loaded by the thread, frees any other resources that the thread maintains, and forces all RPC connections on the thread to close.
      * @details https://learn.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-couninitialize
      */
-    static void uninitCom();
+    static void uninitComForThisThread();
 };
 
 }

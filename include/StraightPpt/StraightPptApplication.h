@@ -20,5 +20,11 @@ public:
      * @param des The destination.
      */
     void get_Presentations(PptPresentations& des);
+
+    /**
+     * @brief Sets a Boolean value that determines whether the object is visible.
+     * @param val The value to set to.
+     */
+    void put_Visible(bool val);
 };
 }

@@ -1,3 +1,6 @@
+# Set the C++ standard.
+set(CMAKE_CXX_STANDARD 20)
+
 # Add source to the test's executable test.
 add_executable(UnitTestOleClipboard "UnitTestOleClipboard.cpp")
 

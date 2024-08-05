@@ -4,6 +4,7 @@
 #include "..\..\include\StraightExcel\StraightExcelWorkbooks.h"
 #include "..\..\include\StraightOle\StraightOleDialogBox.h"
 #include "..\..\include\StraightOle\StraightOleInit.h"
+#include <thread>
 
 /*
  * @details
@@ -22,26 +23,70 @@ SCENARIO("UnitTestExcelProgram", "[ExcelProgram]")
             {
                 THEN("The file should be opened.")
                 {
-                    STRAIGHTOLE::OleInit::initComForThisThread();
-                    STRAIGHTEXCEL::ExcelApplication pXlApp;
-                    STRAIGHTEXCEL::ExcelProgram::start(pXlApp);
-                    pXlApp.put_Visible(true);
-                    STRAIGHTEXCEL::ExcelWorkbooks pXlWorkbooks;
-                    pXlApp.get_Workbooks(pXlWorkbooks);
-                    STRAIGHTEXCEL::ExcelWorkbook pXlWorkbook;
-                    std::string str = STRAIGHTOLE::OleDialogBox::startFileOpenDialogBoxA();
-                    std::wstring wstr;
                     if (true) {
-                        int strLength = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
-                        if (strLength) {
-                            std::vector<wchar_t> buf(strLength + 1);
-                            buf[0] = 0;
-                            strLength = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, &buf[0], strLength + 1);
-                            wstr = std::wstring { &buf[0] };
-                        }
+                        STRAIGHTOLE::OleInit::initComForThisThread();
+                        STRAIGHTEXCEL::ExcelApplication pXlApp;
+                        STRAIGHTEXCEL::ExcelProgram::start(pXlApp);
+                        pXlApp.put_Visible(true);
+                        STRAIGHTEXCEL::ExcelWorkbooks pXlWorkbooks;
+                        pXlApp.get_Workbooks(pXlWorkbooks);
+                        STRAIGHTEXCEL::ExcelWorkbook pXlWorkbook;
+                        pXlWorkbooks.open(pXlWorkbook, STRAIGHTOLE::OleDialogBox::startFileOpenDialogBoxW());
+                        STRAIGHTOLE::OleInit::uninitComForThisThread();
                     }
-                    pXlWorkbooks.open(pXlWorkbook, wstr);
-                    STRAIGHTOLE::OleInit::uninitCom();
+                }
+            }
+        }
+
+        GIVEN("Multiple Excel files.")
+        {
+            WHEN("Opens in multiple threads.")
+            {
+                THEN("All files should be opened.")
+                {
+                    if (true) {
+                        std::vector<std::thread> vecThread;
+                        vecThread.emplace_back([]() {
+                            STRAIGHTOLE::OleInit::initComForThisThread();
+                            STRAIGHTEXCEL::ExcelApplication pXlApp;
+                            STRAIGHTEXCEL::ExcelProgram::start(pXlApp);
+                            pXlApp.put_Visible(true);
+                            STRAIGHTEXCEL::ExcelWorkbooks pXlWorkbooks;
+                            pXlApp.get_Workbooks(pXlWorkbooks);
+                            if (true) {
+                                STRAIGHTEXCEL::ExcelWorkbook pXlWorkbook;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程1文件1_Thread1File1.xlsx" };
+                                pXlWorkbooks.open(pXlWorkbook, wstr);
+                            }
+                            if (true) {
+                                STRAIGHTEXCEL::ExcelWorkbook pXlWorkbook;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程1文件2_Thread1File2.xlsx" };
+                                pXlWorkbooks.open(pXlWorkbook, wstr);
+                            }
+                            STRAIGHTOLE::OleInit::uninitComForThisThread();
+                        });
+                        vecThread.emplace_back([]() {
+                            STRAIGHTOLE::OleInit::initComForThisThread();
+                            STRAIGHTEXCEL::ExcelApplication pXlApp;
+                            STRAIGHTEXCEL::ExcelProgram::start(pXlApp);
+                            pXlApp.put_Visible(true);
+                            STRAIGHTEXCEL::ExcelWorkbooks pXlWorkbooks;
+                            pXlApp.get_Workbooks(pXlWorkbooks);
+                            if (true) {
+                                STRAIGHTEXCEL::ExcelWorkbook pXlWorkbook;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程2文件1_Thread2File1.xlsx" };
+                                pXlWorkbooks.open(pXlWorkbook, wstr);
+                            }
+                            if (true) {
+                                STRAIGHTEXCEL::ExcelWorkbook pXlWorkbook;
+                                std::wstring wstr { L"C:\\Users\\mason\\Documents\\线程2文件2_Thread2File2.xlsx" };
+                                pXlWorkbooks.open(pXlWorkbook, wstr);
+                            }
+                            STRAIGHTOLE::OleInit::uninitComForThisThread();
+                        });
+                        for (auto& e : vecThread)
+                            e.join();
+                    }
                 }
             }
         }

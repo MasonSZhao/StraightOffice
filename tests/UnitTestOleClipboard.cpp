@@ -20,7 +20,7 @@ SCENARIO("UnitTestOleClipboard", "[OleClipboard]")
                 std::string src { "–¥»ÎºÙ«–∞Â°£" };      
                 STRAIGHTOLE::OleClipboard::setClipboardTextA(src);
                 std::string des = STRAIGHTOLE::OleClipboard::getClipboardTextA();
-                STRAIGHTOLE::OleInit::uninitCom();
+                STRAIGHTOLE::OleInit::uninitComForThisThread();
                 CHECK(0 == src.compare(des));
             }
         }

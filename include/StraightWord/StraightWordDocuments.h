@@ -19,6 +19,7 @@ public:
      * @brief Open a document.
      * @param des Destination.
      * @param filePath The file path.
+     * @warning Do use the native backslash format rather than the generic forward slash format.
      */
     void open(WordDocument& des, const std::wstring& filePath);
 };
