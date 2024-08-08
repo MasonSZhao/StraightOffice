@@ -32,7 +32,7 @@ file (GLOB STRAIGHTPPT_SRCS CONFIGURE_DEPENDS "src/StraightPpt/StraightPpt*.cpp"
 file (GLOB STRAIGHTPPT_HEADERS CONFIGURE_DEPENDS "include/StraightPpt/StraightPpt*.h")
 
 # Add source to the project's executable application.
-add_executable (
+add_executable(
 	StraightOfficeExecute
 	"apps/StraightOffice.cpp"
 	"apps/StraightOffice.h"
